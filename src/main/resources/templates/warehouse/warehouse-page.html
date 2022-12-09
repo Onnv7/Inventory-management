@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/css/warehouse/warehouse.css}" rel="stylesheet" />
+    <link th:replace="/fragment/structure.html :: fontawesome" />
+    <link th:replace="/fragment/structure.html :: btcss" />
+    <link th:replace="/fragment/structure.html :: sidebarcss" />
+    <script th:replace="fragment/structure.html :: ajax"></script>
+</head>
+
+<body>
+    <div class="row">
+        <div th:replace="fragment/sidebar.html :: sidebar" />
+        <div class="col-lg-9">
+            <div class="row">
+                <div class="card rounded-3">
+                    <div class="card-body p-4">
+
+                        <h4 class="text-center my-3 pb-3">YOUR WAREHOUSE</h4>
+
+                        <div class="row">
+                            <div class="container mt-5 mb-5 d-flex justify-content-center">
+                                <div class="card px-1 py-4">
+                                    <div class="card-body">
+                                        <h6 class="card-title mb-3">This appointment is for</h6>
+                                        <div class="d-flex flex-row"> <label class="radio mr-1"> <input type="radio"
+                                                    name="add" value="anz" checked> <span> <i class="fa fa-user"></i>
+                                                    Anz CMK </span> </label>
+                                            <label class="radio"> <input type="radio" name="add" value="add"> <span> <i
+                                                        class="fa fa-plus-circle"></i> Add </span> </label>
+                                        </div>
+                                        <h6 class="information mt-4">Please provide following information about your
+                                            warehouse
+                                        </h6>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <!-- <label for="name">Name</label> --> <input class="form-control"
+                                                        type="text" id="code" placeholder="Code">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <div class="input-group"> <input class="form-control" type="text"
+                                                            id="name-wh" placeholder="Name"> </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <div class="input-group"> <input class="form-control" type="text"
+                                                            id="address" placeholder="Address"> </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <button class="btn btn-primary btn-block confirm-button"
+                                            id="btn-add">Add</button>
+                                        <button class="btn btn-info btn-block confirm-button
+                                        btn-update" id="">Update</button>
+                                        <button class="btn btn-danger btn-block confirm-button
+                                        btn-cancel" id="">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <table class="table mb-4" id="warehouse-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">No.</th>
+                                    <th scope="col">Code</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Address</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="warehouse, status : ${warehouses}" th:id="'row-' + ${status.count}">
+                                    <th scope="row" th:text="${status.count}"></th>
+                                    <td th:text="${warehouse.code}"></td>
+                                    <td th:text="${warehouse.name}"></td>
+                                    <td th:text="${warehouse.address}"></td>
+                                    <td>
+                                        <button type="submit" class="btn btn-danger"
+                                            th:id="'btn-delete-' + ${warehouse.id}">
+                                            Delete
+                                        </button>
+                                        <button type="submit" class="btn btn-success ms-1"
+                                            th:id="'btn-edit-' + ${warehouse.id}">
+                                            Edit
+                                        </button>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script type="text/javascript" th:replace="fragment/structure.html :: setup_header"></script>
+<script type="text/javascript" th:src="@{/js/warehouse/warehouse-page.js}"></script>
+
+</html>
