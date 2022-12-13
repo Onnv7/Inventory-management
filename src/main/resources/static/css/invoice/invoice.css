@@ -1,0 +1,10 @@
+.modal-dialog {
+    width: 85%;
+    margin: 0 100px;
+    max-width: 5000px;
+    margin: 1.75rem auto;
+}
+
+body {
+    margin: 0
+}

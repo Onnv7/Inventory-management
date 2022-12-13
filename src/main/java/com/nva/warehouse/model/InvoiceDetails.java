@@ -33,7 +33,7 @@ public class InvoiceDetails  {
     private Invoice invoice;
 
 
-    @JsonIgnore
+//    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;

@@ -12,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -37,8 +39,15 @@ public class ProductController {
 
     @PostMapping("/create/{id}")
     @ResponseBody
-    public ResponseEntity<Product> createProduct(@PathVariable("id") Long id, @RequestBody Product product)
-    {
+    public ResponseEntity<Product> createProduct(@PathVariable("id") Long id, @RequestParam("name") String name,
+                                                 @RequestParam("description") String description,
+                                                 @RequestParam("quantity") int quantity,
+                                                 @RequestParam("image") MultipartFile image) throws IOException {
+        Product product = new Product();
+        product.setName(name);
+        product.setDescription(description);
+        product.setQuantity(quantity);
+        product.setImage(image.getBytes());
         Warehouse warehouse = new Warehouse();
         warehouse.setId(id);
         product.setWarehouse(warehouse);
@@ -48,7 +57,7 @@ public class ProductController {
 
     @GetMapping("warehouse/{id}")
     @ResponseBody
-    public List<Product> getAllWarehousesByWarehouseId(@PathVariable("id") Long id)
+    public List<Product> getAllProductsByWarehouseId(@PathVariable("id") Long id)
     {
         Warehouse warehouse = new Warehouse();
         warehouse.setId(id);
@@ -63,8 +72,20 @@ public class ProductController {
     }
 
     @PostMapping("/update/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable("id") Long id, @RequestBody Product product)
-    {
-        return new ResponseEntity<Product>(productService.updateProduct(product, id), HttpStatus.OK);
+    @ResponseBody
+    public ResponseEntity<Product> updateProduct(@PathVariable("id") Long id, @RequestParam("name") String name,
+                                                 @RequestParam("description") String description,
+                                                 @RequestParam("quantity") int quantity,
+                                                 @RequestParam("image") MultipartFile image) throws IOException {
+        System.out.println(quantity);
+        Product product = new Product();
+
+        product.setName(name);
+        product.setDescription(description);
+        product.setQuantity(quantity);
+        product.setImage(image.getBytes());
+        System.out.println("CHIEU DAI"+product.getImage().length);
+        Product updateProduct = productService.updateProduct(product, id);
+        return new ResponseEntity<Product>(updateProduct, HttpStatus.OK);
     }
 }

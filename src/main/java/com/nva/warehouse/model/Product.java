@@ -23,6 +23,8 @@ public class Product {
     private String description;
     private int quantity;
 
+    @Lob
+    private byte[] image;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "warehouse_id")
@@ -30,7 +32,7 @@ public class Product {
     private Warehouse warehouse;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<InvoiceDetails> invoiceDetails;
 
 
