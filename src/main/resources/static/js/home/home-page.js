@@ -7,9 +7,20 @@ $(document).ready(function () {
     username = $("#username");
     password = $("#password");
     btnSubmit.click(function () {
+        if (checkForm(username.val(), password.val()) == false) {
+            alert("Please fill out the information completely");
+            return;
+        }
         login();
     });
 })
+
+function checkForm(username, password) {
+    if (username.trim() === "" ||
+        password.trim() === "")
+        return false;
+    return true;
+}
 
 function login() {
     url = contextPath + "login";

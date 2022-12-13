@@ -57,6 +57,19 @@ $(document).ready(function () {
     });
 })
 
+function setEvent() {
+    btnDelete = document.querySelectorAll('button[id^=btn-delete-]')
+    btnEdit = document.querySelectorAll('button[id^=btn-edit-]')
+    btnEdit = document.querySelectorAll('button[id^=btn-edit-]')
+    btnDelete.forEach(btn => {
+        btn.addEventListener('click', (e) => deleteProduct(e));
+    });
+
+    btnEdit.forEach(btn => {
+        btn.addEventListener('click', (e) => loadDataToForm(e));
+    });
+}
+
 function createProduct() {
     var idWarehouse = Number(warehouse.val());
     url = contextPath + "product/create/" + idWarehouse;
@@ -78,7 +91,7 @@ function createProduct() {
         processData: false,
         contentType: false,
     }).done(function (response) {
-        alert("OK")
+        alert("Create successful")
         var table = $("#product-table")
         var count = table[0].children[1].children.length + 1;
         let htmlToAppend = (`
@@ -113,6 +126,7 @@ function createProduct() {
             </td>
         </tr>`);
         $("#product-table tbody").append(htmlToAppend);
+        setEvent()
     }).fail(function () {
         alert("Create failed");
     })
@@ -137,7 +151,7 @@ function updateProduct(e) {
         processData: false,
         contentType: false,
     }).done(function (response) {
-        alert("UPDATED");
+        alert("Update successful");
         row.children[1].textContent = response.name;
         row.children[2].children[0].setAttribute('src', `data:image/jpeg;charset=utf-8;base64,${response.image}`);
         row.children[3].textContent = response.quantity;
@@ -163,7 +177,7 @@ function deleteProduct(e) {
     var id = e.target.id.split('-')[2];
     url = contextPath + "product/delete/" + id;
     $.get(url).done(function () {
-        alert("DELETED")
+        alert("Delete successful")
         $(`#${e.path[3].id}`).remove();
     })
 }
@@ -208,7 +222,7 @@ async function getAllProductByWarehouseId() {
         $("#product-table tbody").append(html);
 
     }).done(function () {
-        alert("OK");
+        // alert("OK");
         btnDelete = document.querySelectorAll('button[id^=btn-delete-]')
         btnEdit = document.querySelectorAll('button[id^=btn-edit-]')
         btnDelete.forEach(btn => {

@@ -87,7 +87,38 @@ $(document).ready(function () {
         updateInvoiceDetail(e);
     });
 })
+function setEvent() {
+    btnDelete = document.querySelectorAll('button[id^=btn-delete-]')
+    btnEdit = document.querySelectorAll('button[id^=btn-edit-]')
+    btnDetail = document.querySelectorAll('button[id^=btn-detail-]')
+    btnDetail.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            openModal(e);
+        });
+    });
+    btnDelete.forEach(btn => {
+        btn.addEventListener('click', (e) => deleteImport(e));
+    });
 
+
+    btnEdit.forEach(btn => {
+        btn.addEventListener('click', (e) => loadDataToForm(e));
+    });
+}
+function setEventChild() {
+    btnDetailDelete = document.querySelectorAll('button[id^=btn-delete-detail-]')
+    btnDetailEdit = document.querySelectorAll('button[id^=btn-edit-detail-]')
+    btnDetailDelete.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            deleteInvoiceDetail(e);
+        });
+    });
+    btnDetailEdit.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            loadDataToChildChildForm(e)
+        });
+    });
+}
 function createExport() {
     var idWarehouse = Number(warehouse.val());
     url = contextPath + "invoice/export/create/" + idWarehouse;
@@ -104,7 +135,7 @@ function createExport() {
         data: JSON.stringify(jsonData),
         contentType: "application/json"
     }).done(function (response) {
-        alert("OK")
+        alert("Create successful")
         var table = $("#export-table")
         var count = table[0].children[1].children.length + 1;
         let htmlToAppend = (`
@@ -136,6 +167,7 @@ function createExport() {
             </td>
         </tr>`);
         $("#export-table tbody").append(htmlToAppend);
+        setEvent()
     }).fail(function () {
         alert("Create failed");
     })
@@ -156,7 +188,7 @@ function createInvoiceDetail() {
         data: JSON.stringify(jsonData),
         contentType: "application/json"
     }).done(function (response) {
-        alert("OK")
+        alert("Create successful")
         var table = $("#detail-table tbody")
         var count = table[0].children.length + 1;
         let htmlToAppend = (`
@@ -185,18 +217,7 @@ function createInvoiceDetail() {
         $("#detail-table tbody").append(htmlToAppend);
 
 
-        btnDetailDelete = document.querySelectorAll('button[id^=btn-delete-detail-]')
-        btnDetailEdit = document.querySelectorAll('button[id^=btn-edit-detail-]')
-        btnDetailDelete.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                deleteInvoiceDetail(e);
-            });
-        });
-        btnDetailEdit.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                loadDataToChildChildForm(e)
-            });
-        });
+        setEventChild()
     }).fail(function () {
         alert("Create failed");
     })
@@ -216,7 +237,7 @@ function updateExport(e) {
         data: JSON.stringify(jsonData),
         contentType: "application/json"
     }).done(function (response) {
-        alert("UPDATED");
+        alert("Update successful");
         // console.log(row);
         row.children[1].textContent = jsonData.title;
         row.children[2].textContent = jsonData.date;
@@ -241,7 +262,7 @@ function updateInvoiceDetail(e) {
         data: JSON.stringify(jsonData),
         contentType: "application/json"
     }).done(function (response) {
-        alert("UPDATED");
+        alert("Update successful");
         console.log(rowDetail);
         rowDetail.children[1].textContent = response.product.name;
         rowDetail.children[2].textContent = response.quantity;
@@ -283,7 +304,7 @@ function deleteExport(e) {
     // console.log(e.path[3]);
     url = contextPath + "invoice/export/delete/" + id;
     $.get(url).done(function () {
-        alert("DELETED")
+        alert("Delete successful")
         $(`#${e.path[3].id}`).remove();
     })
 }
@@ -293,7 +314,7 @@ function deleteInvoiceDetail(e) {
     // console.log(e.path[3]);
     url = contextPath + "invoice/export/details/delete/" + id;
     $.get(url).done(function () {
-        alert("DELETED")
+        alert("Delete successful")
         $(`#${e.path[3].id}`).remove();
     })
 }
@@ -303,7 +324,6 @@ async function openModal(e) {
     row = e.path[3];
     // console.log(row, date);
     invoiceId = id;
-    console.log("🚀 ~ file: invoice-export-page.js:306 ~ openModal ~ invoiceId", invoiceId)
 
 
     url = contextPath + "invoice/export/details/" + id;
@@ -421,7 +441,7 @@ async function getAllExportByWarehouseId() {
         })
         $("#export-table tbody").append(html);
     }).done(function () {
-        alert("OK");
+        // alert("OK");
         btnDelete = document.querySelectorAll('button[id^=btn-delete-]')
         btnEdit = document.querySelectorAll('button[id^=btn-edit-]')
         btnDetail = document.querySelectorAll('button[id^=btn-detail-]')

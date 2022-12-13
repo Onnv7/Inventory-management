@@ -2,7 +2,7 @@ var btnRegister;
 var username;
 var password;
 var rePassword;
-var contextPath = "[[@{/}]]";
+// var contextPath = "[[@{/}]]";
 
 $(document).ready(function () {
     btnRegister = $("#btn-register");
@@ -14,10 +14,6 @@ $(document).ready(function () {
             alert("Please fill out the information completely");
             return;
         }
-        else if (checkPwd(password.val(), rePassword.val()) == false) {
-            alert("Re-password incorrect");
-            return;
-        }
         register();
     });
 })
@@ -27,15 +23,19 @@ function checkForm(username, password, rePassword) {
         password.trim() === "" ||
         rePassword.trim() === "")
         return false;
-    return false;
-}
-
-function checkPwd(password, rePassword) {
-    if (password !== rePassword)
-        return false;
     return true;
 }
+
+
 function register() {
+    if (password.val() !== rePassword.val()) {
+        alert("Re-password is not valid")
+        return;
+    }
+    else if (password.val().length < 8) {
+        alert("Password must be at least 8 characters")
+        return;
+    }
     url = contextPath + "register";
     jsonData = {
         username: username.val(),
@@ -48,11 +48,13 @@ function register() {
         data: JSON.stringify(jsonData),
         contentType: "application/json"
     }).done(function (response) {
-        if (typeof response === "object")
-            alert("login success")
+        if (typeof response === "object") {
+            alert("Register success");
+            window.location.pathname = "/login";
+        }
         else
-            alert("Wrong username or password");
+            alert("Wrong from server");
     }).fail(function () {
-        alert("Login failed");
+        alert("Register failed");
     })
 }

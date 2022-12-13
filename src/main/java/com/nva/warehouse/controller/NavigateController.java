@@ -7,16 +7,31 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
 public class NavigateController {
 
 
-    @GetMapping(value = {"/", "/home"})
+    @GetMapping(value = {"/", "/login"})
     public String home(Model model) {
-        System.out.println("Home");
         model.addAttribute("user", new User());
+        return "home/home-page";
+    }
+
+    @GetMapping(value = {"/logout"})
+    public String logout(HttpServletRequest req, HttpServletResponse res)
+    {
+        Cookie[] cookies = req.getCookies();
+        if (cookies != null) {
+            for (Cookie cookieToBeDeleted : cookies) {
+                cookieToBeDeleted.setMaxAge(0);
+                res.addCookie(cookieToBeDeleted);
+            }
+        }
         return "home/home-page";
     }
 //    private UserService userService;
